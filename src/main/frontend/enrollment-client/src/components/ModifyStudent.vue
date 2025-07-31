@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 
 const route = useRoute();
@@ -32,6 +32,20 @@ const getEnrollmentCourses = async ()=>{
         }
     })
 }
+//computed values of future courses because it's complicated as values in the dropdown which is using JSON strings as values
+const formatted_future_courses = (computed(()=>{
+    return future_courses.value.map(c=>{
+        let startDate = new Date(c.startDate).toISOString().split('T')[0]; //set to yyyy-mm-dd format
+        let endDate = new Date(c.endDate).toISOString().split('T')[0]; //set to yyyy-mm-dd format
+        return {
+            courseId:c.id,
+            subjectId:c.subject.id,
+            startDate:startDate,
+            endDate:endDate,
+            name:`${c.subject.name} (${startDate}-${endDate})` //Want name to have subject and start and end dates to distinguish them
+        }
+    })}
+));
 const getStudent = () => {
     fetch(`${api}/students/${id}`).then(async (res) => {
         if (res.ok) {
@@ -115,6 +129,7 @@ const unenroll_course = (courseId) => {
         }
     });
 }
+
 </script>
 <template>
     <form @submit="saveStudent">
@@ -133,12 +148,9 @@ const unenroll_course = (courseId) => {
             <div class="py-4 flex flex-row justify-center items-center gap-3">
                 <label for="enroll" class="inline-block w-30 text-right">Select Course</label>
                 <select class="border w-40" id="enroll" name="enroll" v-model="enrollment_choice">
-                    <!-- Set courses here with option values as a JSON string with dates as yyyy-mm-dd, and the name of format Subject(startDate-endDate) -->
-                    <option v-for="course in future_courses" :key="course.id"
-                    :value="`{&quot;courseId&quot;:${course.id}, &quot;subjectId&quot;:${course.subject.id},
-                    &quot;startDate&quot;:&quot;${new Date(course.startDate).toISOString().split('T')[0]}&quot;,
-                    &quot;endDate&quot;:&quot;${new Date(course.endDate).toISOString().split('T')[0]}&quot;}`">
-                        {{ `${course.subject.name} (${new Date(course.startDate).toLocaleDateString()}-${new Date(course.endDate).toLocaleDateString()})` }}
+                    <option v-for="course in formatted_future_courses" :key="course.courseId"
+                        :value="JSON.stringify(course)">
+                        {{course.name}}
                     </option>
                 </select>
                 <button @click="enroll_course">Enroll</button>
