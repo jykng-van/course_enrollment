@@ -30,17 +30,21 @@ There are 6 tables in the database. A quick summary of them are:
 - **student_courses** - This is a join table between students and courses, it represents an enrollment of a student into a course. A student's grade is also in this table and it represented by Grade Point numbers between 0 and 4.33, though nothing sets those grades yet.
 - **system_logs** - This is the system logs of all actions involving the REST APIs, it contains a timestamp, URI of the request, request method, remote IP address, response status code and possible exceptions
 
-System logs can't be seen anywhere from the front end app but you can see what's in them if you use the H2 console (which is enabled in application.properties) with the path `/h2-console` and the data source url of *jdbc:h2:mem:testdb*
+JPA was used and most of the backend code was centered around this ORM and it's intricacies.
 
-The system logs should get updated with an interceptor middleware that writes the columns mentioned above.
+The models used in the project are quite eager in their fetches, and will get most of the associated data with the relationships.
 
-The models used in the project are quite eager in their fetches, and will get most of the associated data with the relationships. More efforts in validation was done on the front end with this project.
+All the relations between models/entities are bi-directional, this has lead to it being fairly easy when retrieving data with their related entities such as in many of the reponses with the GET requests. But there were many complications around model persistence with relationships, and some potential infinite recursions of related entities.
 
 The relationships tend to cascade when a parent is deleted (with teachers being the only one different), though in all cases explicit deletion of related entities was done if there was such an item deleted. When something is deleted, all records of it is gone from the system.
 
 Most database operations where done using JPA repositories with built in functions or JPSQL, but some queries used Native SQL instead because of complexities around relationships with the tables.
 
 There's also an associated Service with each repository.
+
+System logs can't be seen anywhere from the front end app but you can see what's in them if you use the H2 console (which is enabled in application.properties) with the path `/h2-console` and the data source url of *jdbc:h2:mem:testdb*
+
+The system logs should get updated with an interceptor middleware that writes the columns mentioned above.
 
 ### The APIs
 There are 4 controllers and of them a REST API controllers. There paths are:
@@ -68,7 +72,9 @@ It's Vue 3 that was used for these pages and all components used the composition
 
 Beyond vue-router the only other plugins used was **Tailwind CSS** for css. I wanted it to be relatively light weight in it's dependencies.
 
-Validation has mostly been handled in the front end app. The assumption is that the person using the app is some sort of school administrator and not a student. A quick rundown of pages.
+Validation has mostly been handled in the front end app.
+
+The assumption is that the person using the app is some sort of school administrator and not a student. A quick rundown of pages.
 
 **Courses**: This lists available courses, it also shows the number of students enrolled. You can search courses by subject name here too. You can delete courses here.
 
