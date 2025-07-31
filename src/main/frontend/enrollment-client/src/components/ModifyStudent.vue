@@ -76,15 +76,12 @@ const enroll_course = (e) => {
     );
     console.log(overlap);
     if (overlap.length == 0){
-        fetch(`${api}/students/${id}`,
+        fetch(`${api}/students/${id}/${courseId}`,
             {
-                method:'PATCH',
+                method:'POST',
                 headers:{
                     'Content-Type':'application/json'
-                },
-                body: JSON.stringify({
-                        courseId:courseId
-                    })
+                }
 
             }
         ).then(async (res)=>{
@@ -99,6 +96,26 @@ const enroll_course = (e) => {
         enroll_message.value = "You can't enroll because there is an overlap";
     }
 }
+const unenroll_course = (courseId) => {
+
+
+    fetch(`${api}/students/${id}/${courseId}`,
+        {
+            method:'DELETE',
+            headers:{
+                'Content-Type':'application/json'
+            }
+        }
+    ).then(async (res)=>{
+        if (res.ok){
+            const res_data = await res.json();
+            await Promise.all([getStudent(), getEnrollmentCourses()]);
+            enroll_message.value = "Course unenrolled";
+        }
+    });
+
+
+}
 </script>
 <template>
     <form @submit="saveStudent">
@@ -109,7 +126,7 @@ const enroll_course = (e) => {
             <input type="text" class="border" id="name" name="name" v-model="data.name" />
         </div>
         <div class="flex flex-row justify-center items-center gap-4">
-            <router-link to="/students">Back</router-link>
+            <router-link class="border inline-block rounded-lg py-[.2em] px-4" to="/students">Back</router-link>
             <button type="submit">Save</button>
         </div>
         <section v-if="id" class="mt-5">
@@ -144,7 +161,7 @@ const enroll_course = (e) => {
                         <td>{{new Date(sc.course.endDate).toLocaleDateString()}}</td>
                         <td>{{sc.grade}}</td>
                         <td>
-                            <button class="bg-red-700 text-white inline-block ml-2">Delete</button>
+                            <button v-if="sc.course.endDate > Date.now()" type="button" class="bg-red-700 text-white inline-block ml-2" @click="unenroll_course(sc.course.id)">Delete</button>
                         </td>
                     </tr>
                 </tbody>

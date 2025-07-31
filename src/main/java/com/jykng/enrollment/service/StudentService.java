@@ -49,4 +49,10 @@ public class StudentService {
         return studentRepository.findById(student_id).get();
     }
 
+    @Transactional
+    public Student unenroll(long student_id, long course_id){
+        studentRepository.unenrollCourse(student_id, course_id);
+
+        return studentRepository.findById(student_id).get();
+    }
 }

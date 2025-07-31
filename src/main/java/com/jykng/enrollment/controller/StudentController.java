@@ -6,7 +6,6 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import com.jykng.enrollment.model.EnrollInput;
 import com.jykng.enrollment.model.Student;
 import com.jykng.enrollment.service.StudentService;
 
@@ -47,8 +46,14 @@ public class StudentController {
     }
 
     // Enroll in a course
-    @RequestMapping(value = "students/{id}", method = RequestMethod.PATCH)
-    public Student enrollCourse(@PathVariable Long id, @RequestBody EnrollInput input){
-        return studentService.enroll(id, input.getCourseId());
+    @RequestMapping(value = "students/{studentId}/{courseId}", method = RequestMethod.POST)
+    public Student enrollCourse(@PathVariable Long studentId, @PathVariable Long courseId){
+        return studentService.enroll(studentId, courseId);
+    }
+
+    // Unenroll in a course
+    @RequestMapping(value = "students/{studentId}/{courseId}", method = RequestMethod.DELETE)
+    public Student unenrollCourse(@PathVariable Long studentId, @PathVariable Long courseId){
+        return studentService.unenroll(studentId, courseId);
     }
 }

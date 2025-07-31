@@ -60,7 +60,7 @@ const saveSubject = (e) => {
             <input type="text" class="border" id="name" name="name" v-model="data.name" />
         </div>
         <div class="flex flex-row justify-center items-center gap-4">
-            <router-link to="/subjects">Back</router-link>
+            <router-link class="border inline-block rounded-lg py-[.2em] px-4" to="/subjects">Back</router-link>
             <button type="submit">Save</button>
         </div>
     </form>

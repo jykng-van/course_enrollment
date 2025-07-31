@@ -146,9 +146,27 @@ const saveCourse = (e) => {
             <input type="date" class="border w-40" id="end_date" name="end_date" v-model="end_date" />
         </div>
         <div class="flex flex-row justify-center items-center gap-4">
-            <router-link to="/courses">Back</router-link>
+            <router-link class="border inline-block rounded-lg py-[.2em] px-4" to="/courses">Back</router-link>
             <button type="submit">Save</button>
         </div>
+
+        <section v-if="id" class="mt-5">
+            <h3 class="text-lg">Students</h3>
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Grade</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="sc in data.studentCourses" :key="sc.student.id">
+                        <td>{{sc.student.name}}</td>
+                        <td>{{sc.grade}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
 
     </form>
 </template>

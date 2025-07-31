@@ -22,4 +22,8 @@ public interface StudentRepository extends JpaRepository<Student, Long> {
     @Modifying
     @Query(value="INSERT INTO student_courses (student_id, course_id) VALUES (:student_id, :course_id)", nativeQuery=true)
     public void enrollCourse(@Param("student_id") long student_id, @Param("course_id") long course_id);
+
+    @Modifying
+    @Query("DELETE StudentCourse sc WHERE sc.student.id=:student_id AND sc.course.id=:course_id")
+    public void unenrollCourse(@Param("student_id") long student_id, @Param("course_id") long course_id);
 }

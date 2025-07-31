@@ -45,7 +45,7 @@ There are 4 controllers and of them a REST API controllers. There paths are:
 - **subjects**
 - **courses**
 
-They contain basic CRUD functions, and some special cases like course enrollment for students, or getting future un-enrolled courses. They generally use GET, POST, DELETE and PUT as expected, though enrollment uses the PATCH method.
+They contain basic CRUD functions, and some special cases like course enrollment for students, or getting future un-enrolled courses. They generally use GET, POST, DELETE and PUT as expected.
 
 As part of the configuration of getting the APIs to work with the front end, CORS was enabled and it allows the source from anywhere.
 

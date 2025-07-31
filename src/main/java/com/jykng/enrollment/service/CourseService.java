@@ -54,12 +54,15 @@ public class CourseService {
     @Transactional
     public Course createCourse(CourseInput input) {
         Course course = new Course();
-        course.setSubject(subjectRepository.findById(input.getSubjectId()).get());
-        course.setTeacher(teacherRepository.findById(input.getTeacherId()).get());
+        course.setSubject(subjectRepository.findById(input.getSubjectId()).get()); //get subject
+        var teacherId = teacherRepository.findById(input.getTeacherId()); //get teacher
+        if (teacherId.isPresent()){ //check if teacher exist
+            course.setTeacher(teacherId.get()); //assign if exists
+        }
 
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH); //yyyy-mm-dd formatter for date strings
 
-        try {
+        try { //try setting the start_date and end_date based on date strings
             Date start_date = formatter.parse(input.getStartDate());
             Date end_date = formatter.parse(input.getEndDate());
 
