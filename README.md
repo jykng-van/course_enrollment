@@ -68,7 +68,7 @@ Beyond vue-router the only other plugins used was **Tailwind CSS** as I wanted i
 
 Validation has mostly been handled in the front end app. The assumption is that the person using the app is some sort of school administrator and not a student. A quick rundown of pages.
 
-**Courses**: This lists available courses, it also shows the number of students enrolled. You can delete courses here.
+**Courses**: This lists available courses, it also shows the number of students enrolled. You can search courses by subject name here too. You can delete courses here.
 
 **HomeMenu**: This is the main index page, it just has links to Courses, Students, Subjects and Teachers, and can be accessed by clicking on the title
 
