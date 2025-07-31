@@ -12,6 +12,8 @@ mvnw clean install
 mvnw spring-boot:run
 ```
 
+There's no authentication and authorization with the back end, anyone can change data. But it's assumed that it's some sort of course administrator using the app.
+
 ### The Database and Models
 
 The database used in this project is H2, it's a small light weight datbase with tables initialized by *schema.sql* and *data.sql*, it does not persist any changes between the project running. But there's some sample data already filled for the project.
@@ -63,3 +65,23 @@ The frontend app uses **vue-router** for the different pages, there's effectivel
 It's Vue 3 that was used for these pages and all components used the composition API. Vanilla javascript fetch was used for all API requests from the front end because I felt it's good enough to use for the project's purposes.
 
 Beyond vue-router the only other plugins used was **Tailwind CSS** as I wanted it to be relatively light weight in it's dependencies.
+
+Validation has mostly been handled in the front end app. The assumption is that the person using the app is some sort of school administrator and not a student. A quick rundown of pages.
+
+**Courses**: This lists available courses, it also shows the number of students enrolled. You can delete courses here.
+
+**HomeMenu**: This is the main index page, it just has links to Courses, Students, Subjects and Teachers, and can be accessed by clicking on the title
+
+**ModifyCourse**: This is for adding/editing a course. It shows students enrolled in the course and their grades. Here's where you can assign a teacher to a course, as well as setting the subject, start and end dates.
+
+**ModifyStudent**: This is for adding/editing a student. It shows courses the student has enrolled in. Here's where you can enroll a student in a course. Available courses are in the future, with a grace period of 1 week after starting. You can also unenroll from courses that aren't completed.
+
+**ModifySubject**: This is for adding/editing a subject.
+
+**ModifyTeacher**: This is for adding/editing a teacher. It shows which courses they're assigned to.
+
+**Students**: This lists students in the system, it also shows the number of courses they're enrolled in. You can delete students here.
+
+**Subjects**: This lists subjects, it also shows how many courses there are of the subject. You can also delete subjects here.
+
+**Teachers**: This list teachers in the system, it also show how many courses they're teaching or have taught. You can delete teachers here.
