@@ -14,6 +14,8 @@ mvnw spring-boot:run
 
 There's no authentication and authorization with the back end, anyone can change data. But it's assumed that it's some sort of course administrator using the app.
 
+It uses the CSR pattern of there being layers such as: Model, Repository, Service and Rest Controllers.
+
 ### The Database and Models
 
 The database used in this project is H2, it's a small light weight datbase with tables initialized by *schema.sql* and *data.sql*, it does not persist any changes between the project running. But there's some sample data already filled for the project.
@@ -34,7 +36,7 @@ The system logs should get updated with an interceptor middleware that writes th
 
 The models used in the project are quite eager in their fetches, and will get most of the associated data with the relationships. More efforts in validation was done on the front end with this project.
 
-The relationships tend to cascade when a parent is deleted (with teachers being the only one different), though in all cases explicit deletion of related entities was done if there was such an item deleted.
+The relationships tend to cascade when a parent is deleted (with teachers being the only one different), though in all cases explicit deletion of related entities was done if there was such an item deleted. When something is deleted, all records of it is gone from the system.
 
 Most database operations where done using JPA repositories with built in functions or JPSQL, but some queries used Native SQL instead because of complexities around relationships with the tables.
 
@@ -62,9 +64,9 @@ There is an *.env* which has just one environment variable `VITE_API_URL` which 
 
 The frontend app uses **vue-router** for the different pages, there's effectively 9 different pages with a main menu home page, 4 list pages for Teachers, Students, Courses and Subjects, and 4 modify/form pages.
 
-It's Vue 3 that was used for these pages and all components used the composition API. Vanilla javascript fetch was used for all API requests from the front end because I felt it's good enough to use for the project's purposes.
+It's Vue 3 that was used for these pages and all components used the composition API. Components go only about 2 levels deep, there probably could have been more re-use in components. Vanilla javascript fetch was used for all API requests from the front end because I felt it's good enough to use for the project's purposes.
 
-Beyond vue-router the only other plugins used was **Tailwind CSS** as I wanted it to be relatively light weight in it's dependencies.
+Beyond vue-router the only other plugins used was **Tailwind CSS** for css. I wanted it to be relatively light weight in it's dependencies.
 
 Validation has mostly been handled in the front end app. The assumption is that the person using the app is some sort of school administrator and not a student. A quick rundown of pages.
 
