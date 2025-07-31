@@ -1,0 +1,43 @@
+CREATE TABLE teachers(
+id INT PRIMARY KEY AUTO_INCREMENT,
+name VARCHAR(50) NOT NULL
+);
+
+CREATE TABLE students(
+id INT PRIMARY KEY AUTO_INCREMENT,
+name VARCHAR(50) NOT NULL
+);
+
+CREATE TABLE subjects(
+id INT PRIMARY KEY AUTO_INCREMENT,
+name VARCHAR(50) NOT NULL
+);
+
+CREATE TABLE courses(
+id INT PRIMARY KEY AUTO_INCREMENT,
+subject_id INT NOT NULL,
+teacher_id INT,
+start_date DATE NOT NULL,
+end_date DATE NOT NULL,
+FOREIGN KEY (subject_id) REFERENCES subjects(id) ON DELETE CASCADE,
+FOREIGN KEY (teacher_id) REFERENCES teachers(id) ON DELETE SET NULL
+);
+
+CREATE TABLE student_courses(
+student_id INT NOT NULL,
+course_id INT NOT NULL,
+grade DECIMAL (3,2),
+FOREIGN KEY (course_id) REFERENCES courses(id) ON DELETE CASCADE,
+FOREIGN KEY (student_id) REFERENCES students(id) ON DELETE CASCADE,
+PRIMARY KEY (course_id, student_id)
+);
+
+CREATE TABLE system_logs(
+id INT PRIMARY KEY AUTO_INCREMENT,
+timestamp DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+request_url VARCHAR(255) NOT NULL,
+request_type VARCHAR(6),
+request_ip VARCHAR(45),
+response_status INT,
+response_exception TEXT
+)
