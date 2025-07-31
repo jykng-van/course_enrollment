@@ -12,6 +12,8 @@ const future_courses = ref([]);
 const enrollment_choice = ref(null);
 const enroll_message = ref('');
 
+const message = ref('');
+
 console.log('id', id);
 
 onMounted(async () => {
@@ -39,22 +41,27 @@ const getStudent = () => {
 }
 const saveStudent = (e) => {
     e.preventDefault();
-    fetch(`${api}/students${id != null ? `/${id}` : ''}`,
-        {
-            method: id == null ? 'POST' : 'PUT',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(data.value)
-        }
-    ).then(async (res) => {
-        if (res.ok) {
-            const res_data = await res.json();
-            data.value = res_data;
-            console.log(data.value);
-            router.push({ path: `/students` });
-        }
-    })
+    if (!data.value.name){
+        message.value = "Name is required";
+    }else{
+        fetch(`${api}/students${id != null ? `/${id}` : ''}`,
+            {
+                method: id == null ? 'POST' : 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data.value)
+            }
+        ).then(async (res) => {
+            if (res.ok) {
+                const res_data = await res.json();
+                data.value = res_data;
+                console.log(data.value);
+                router.push({ path: `/students` });
+            }
+        })
+    }
+
 }
 const enroll_course = (e) => {
     e.preventDefault();
@@ -95,6 +102,8 @@ const enroll_course = (e) => {
 </script>
 <template>
     <form @submit="saveStudent">
+        <h2 class="text-lg font-bold">{{id ? 'Edit':'Add'}} Student</h2>
+        <div v-if="message" class="text-red-500">{{ message }}</div>
         <div class="py-5">
             <label for="name" class="inline-block w-20 pr-3 text-right">Name</label>
             <input type="text" class="border" id="name" name="name" v-model="data.name" />
@@ -103,7 +112,7 @@ const enroll_course = (e) => {
             <router-link to="/students">Back</router-link>
             <button type="submit">Save</button>
         </div>
-        <section class="mt-5">
+        <section v-if="id" class="mt-5">
             <h3 class="text-lg">Course Enrollment</h3>
             <div class="py-4 flex flex-row justify-center items-center gap-3">
                 <label for="enroll" class="inline-block w-30 text-right">Select Course</label>

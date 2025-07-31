@@ -33,7 +33,7 @@ const deleteCourse = async (id)=>{
 <template>
     <section>
         <h2 class="text-lg font-bold">Courses</h2>
-        <router-link to="/course/">Add Course</router-link>
+        <router-link class="inline-block py-1 px-2 border rounded-sm" to="/course/">Add Course</router-link>
         <div class="flex justify-end flex-row gap-4">
             <input type="search" class="border w-50" id="search" name="search" v-model="search" placeholder="Search by subject" />
             <button type="button" @click="getCourses">Search</button>

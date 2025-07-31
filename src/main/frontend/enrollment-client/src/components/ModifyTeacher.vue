@@ -8,6 +8,8 @@ const id = route.params.id;
 const data = ref({});
 const api = import.meta.env.VITE_API_URL;
 
+const message = ref('');
+
 console.log('id',id);
 
 onMounted(()=>{
@@ -25,27 +27,34 @@ const getTeacher = ()=>{
 }
 const saveTeacher = (e)=>{
     e.preventDefault();
-    fetch(`${api}/teachers${id!=null ? `/${id}`:''}`,
-        {
-            method: id==null ? 'POST':'PUT',
-            headers:{
-                'Content-Type':'application/json'
-            },
-            body:JSON.stringify(data.value)
-        }
-    ).then(async (res)=>{
-        if (res.ok){
-            const res_data = await res.json();
-            data.value = res_data;
-            console.log(data.value);
-            router.push({path:`/teachers`});
-        }
-    })
+    if (!data.value.name){
+        message.value = 'Name is required';
+    }else{
+        fetch(`${api}/teachers${id!=null ? `/${id}`:''}`,
+            {
+                method: id==null ? 'POST':'PUT',
+                headers:{
+                    'Content-Type':'application/json'
+                },
+                body:JSON.stringify(data.value)
+            }
+        ).then(async (res)=>{
+            if (res.ok){
+                const res_data = await res.json();
+                data.value = res_data;
+                console.log(data.value);
+                router.push({path:`/teachers`});
+            }
+        })
+    }
+
 }
 
 </script>
 <template>
     <form @submit="saveTeacher">
+        <h2 class="text-lg font-bold">{{id ? 'Edit':'Add'}} Teacher</h2>
+        <div v-if="message" class="text-red-500">{{ message }}</div>
         <div class="py-5">
             <label for="name" class="inline-block w-20 pr-3 text-right">Name</label>
             <input type="text" class="border" id="name" name="name" v-model="data.name" />

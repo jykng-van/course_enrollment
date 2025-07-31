@@ -33,7 +33,7 @@ const deleteSubject = async (id)=>{
 <template>
     <section>
         <h2 class="text-lg font-bold">Subjects</h2>
-        <router-link to="/subject/">Add Subject</router-link>
+        <router-link class="inline-block py-1 px-2 border rounded-sm" to="/subject/">Add Subject</router-link>
         <table class="data-table">
             <thead>
                 <tr>

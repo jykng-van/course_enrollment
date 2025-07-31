@@ -82,11 +82,11 @@ const saveCourse = (e) => {
     e.preventDefault();
     //some validation
     console.log('saveCourse validate', selected_subject.value, start_date.value, end_date.value);
-    if (selected_subject.value == null || selected_subject.value == ''){
+    if (!selected_subject.value == null){
         message.value="Subject is required";
-    }else if (start_date.value == null || start_date.value == ''){
+    }else if (!start_date.value){
         message.value="Start Date is required";
-    }else if (end_date.value == null || end_date.value == ''){
+    }else if (!end_date.value){
         message.value="End Date is required";
     }else if (start_date.value >= end_date.value){
         message.value="Start Date must be less than End Date"
@@ -122,6 +122,7 @@ const saveCourse = (e) => {
 </script>
 <template>
     <form @submit="saveCourse">
+        <h2 class="text-lg font-bold">{{id ? 'Edit':'Add'}} Course</h2>
         <div v-if="message" class="text-red-500">{{ message }}</div>
         <div class="py-5">
             <label for="subject" class="inline-block w-30 pr-3 text-right">Subject</label>

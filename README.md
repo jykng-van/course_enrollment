@@ -32,6 +32,8 @@ The system logs should get updated with an interceptor middleware that writes th
 
 The models used in the project are quite eager in their fetches, and will get most of the associated data with the relationships. More efforts in validation was done on the front end with this project.
 
+The relationships tend to cascade when a parent is deleted (with teachers being the only one different), though in all cases explicit deletion of related entities was done if there was such an item deleted.
+
 Most database operations where done using JPA repositories with built in functions or JPSQL, but some queries used Native SQL instead because of complexities around relationships with the tables.
 
 There's also an associated Service with each repository.

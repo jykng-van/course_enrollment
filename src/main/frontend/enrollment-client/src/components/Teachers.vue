@@ -34,7 +34,7 @@ const deleteTeacher = async (id)=>{
 <template>
     <section>
         <h2 class="text-lg font-bold">Teachers</h2>
-        <router-link to="/teacher/">Add Teacher</router-link>
+        <router-link class="inline-block py-1 px-2 border rounded-sm" to="/teacher/">Add Teacher</router-link>
         <table class="data-table">
             <thead>
                 <tr>
