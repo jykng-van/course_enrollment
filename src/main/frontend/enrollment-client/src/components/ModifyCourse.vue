@@ -22,12 +22,13 @@ const end_date = ref(null);
 console.log('id', id);
 
 onMounted(async () => {
-    await Promise.all([getSubjects(), getTeachers()]);
+    await Promise.all([getSubjects(), getTeachers()]); //don't care which order they come in, just that they're done
 
     if (id != null) {
         getCourse(id);
     }
 });
+//get subjects for dropdown
 const getSubjects = async () => {
     await fetch(`${api}/subjects`).then(async (res) => {
         if (res.ok) {
@@ -40,6 +41,7 @@ const getSubjects = async () => {
         }
     })
 }
+//get teachers for dropdown
 const getTeachers = async () => {
     await fetch(`${api}/teachers`).then(async (res) => {
         if (res.ok) {
@@ -48,7 +50,6 @@ const getTeachers = async () => {
                 return {id:t.id, name:t.name}
             });
             console.log(res_data);
-
         }
     })
 }
@@ -66,7 +67,6 @@ const getCourse = () => {
                 selected_teacher.value = res_data.teacher.id;
             }
 
-
             //set dates
             let date = new Date( res_data.startDate);
             console.log('start date', res_data.startDate, date);
@@ -82,13 +82,13 @@ const saveCourse = (e) => {
     e.preventDefault();
     //some validation
     console.log('saveCourse validate', selected_subject.value, start_date.value, end_date.value);
-    if (!selected_subject.value == null){
+    if (!selected_subject.value == null){ //subject validation
         message.value="Subject is required";
-    }else if (!start_date.value){
+    }else if (!start_date.value){ //start date validation
         message.value="Start Date is required";
-    }else if (!end_date.value){
+    }else if (!end_date.value){ //end date validation
         message.value="End Date is required";
-    }else if (start_date.value >= end_date.value){
+    }else if (start_date.value >= end_date.value){ //validate start date and end date
         message.value="Start Date must be less than End Date"
     }else{
         //prepare course because it's special
@@ -99,6 +99,7 @@ const saveCourse = (e) => {
             endDate:end_date.value,
         }
         console.log(course);
+        //presence of ID indicates if it's add or edit
         fetch(`${api}/courses${id != null ? `/${id}` : ''}`,
             {
                 method: id == null ? 'POST' : 'PUT',

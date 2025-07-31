@@ -27,9 +27,10 @@ const getTeacher = ()=>{
 }
 const saveTeacher = (e)=>{
     e.preventDefault();
-    if (!data.value.name){
+    if (!data.value.name){ //name validation
         message.value = 'Name is required';
     }else{
+        //presence of ID indicates if it's add or edit
         fetch(`${api}/teachers${id!=null ? `/${id}`:''}`,
             {
                 method: id==null ? 'POST':'PUT',

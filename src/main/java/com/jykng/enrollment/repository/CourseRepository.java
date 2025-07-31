@@ -26,10 +26,12 @@ public interface CourseRepository extends JpaRepository<Course, Long>{
     @Modifying
     public void deleteStudentCourses(@Param("id") long id);
 
+    //because deleteById doesn't work with all the Eager fetches
     @Query("DELETE Course c WHERE c.id = :id")
     @Modifying
     public void reallyDeleteById(@Param("id") long id);
 
+    //search courses by subject name search, set subject name lowercase so case insensitive
     @Query("SELECT c FROM Course c WHERE LOWER(c.subject.name) LIKE %:search%")
     public List<Course> findAllWithSearch(@Param("search") String search);
 

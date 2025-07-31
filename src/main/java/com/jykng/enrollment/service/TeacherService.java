@@ -33,7 +33,7 @@ public class TeacherService {
 
     @Transactional
     public void deleteTeacher(long id){
-        courseRepository.removeTeacherById(id);
+        courseRepository.removeTeacherById(id); //remove teacher from courses
 
         teacherRepository.deleteById(id);
     }

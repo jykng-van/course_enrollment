@@ -22,6 +22,7 @@ onMounted(async () => {
         getStudent(id);
     }
 });
+//get enrollable courses for dropdown
 const getEnrollmentCourses = async ()=>{
     fetch(`${api}/courses/future/${id}`).then(async (res) => {
         if (res.ok) {
@@ -41,9 +42,10 @@ const getStudent = () => {
 }
 const saveStudent = (e) => {
     e.preventDefault();
-    if (!data.value.name){
+    if (!data.value.name){ //name validation
         message.value = "Name is required";
     }else{
+        //presence of ID indicates if it's add or edit
         fetch(`${api}/students${id != null ? `/${id}` : ''}`,
             {
                 method: id == null ? 'POST' : 'PUT',
@@ -65,15 +67,17 @@ const saveStudent = (e) => {
 }
 const enroll_course = (e) => {
     e.preventDefault();
-    console.log(enrollment_choice.value);
-    console.log(JSON.parse(enrollment_choice.value));
-    const {courseId, subjectId, startDate, endDate} = JSON.parse(enrollment_choice.value);
+
+    const {courseId, subjectId, startDate, endDate} = JSON.parse(enrollment_choice.value); //get all values from the enrollment choice which is a JSON string
     console.log(courseId, subjectId, startDate, endDate);
-    console.log(data.value.studentCourses);
+
+    //filter by checking if the existing enrolled courses overlap with the selected enrollment
+    //also convert existing course's date to yyyy-mm-dd so that they can be compared correctly
     let overlap = data.value.studentCourses.filter(sc=>sc.course.subject.id==subjectId &&
         new Date(sc.course.startDate).toISOString().split('T')[0]<=endDate &&
         new Date(sc.course.endDate).toISOString().split('T')[0]>=startDate
     );
+
     console.log(overlap);
     if (overlap.length == 0){
         fetch(`${api}/students/${id}/${courseId}`,
@@ -82,7 +86,6 @@ const enroll_course = (e) => {
                 headers:{
                     'Content-Type':'application/json'
                 }
-
             }
         ).then(async (res)=>{
             if (res.ok){
@@ -97,8 +100,6 @@ const enroll_course = (e) => {
     }
 }
 const unenroll_course = (courseId) => {
-
-
     fetch(`${api}/students/${id}/${courseId}`,
         {
             method:'DELETE',
@@ -113,8 +114,6 @@ const unenroll_course = (courseId) => {
             enroll_message.value = "Course unenrolled";
         }
     });
-
-
 }
 </script>
 <template>
@@ -134,6 +133,7 @@ const unenroll_course = (courseId) => {
             <div class="py-4 flex flex-row justify-center items-center gap-3">
                 <label for="enroll" class="inline-block w-30 text-right">Select Course</label>
                 <select class="border w-40" id="enroll" name="enroll" v-model="enrollment_choice">
+                    <!-- Set courses here with option values as a JSON string with dates as yyyy-mm-dd, and the name of format Subject(startDate-endDate) -->
                     <option v-for="course in future_courses" :key="course.id"
                     :value="`{&quot;courseId&quot;:${course.id}, &quot;subjectId&quot;:${course.subject.id},
                     &quot;startDate&quot;:&quot;${new Date(course.startDate).toISOString().split('T')[0]}&quot;,
